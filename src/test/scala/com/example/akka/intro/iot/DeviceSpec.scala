@@ -1,0 +1,44 @@
+package com.example.akka.intro.iot
+
+import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
+import org.scalatest.WordSpecLike
+
+class DeviceSpec extends ScalaTestWithActorTestKit with WordSpecLike {
+
+  import Device._
+
+  "Device actor" must {
+
+    "reply with empty reading if no temperature is known" in {
+      val probe = createTestProbe[RespondTemperature]()
+      val actorUnderTest = spawn(Device("my-group", "my-device"))
+
+      actorUnderTest ! Device.ReadTemperature(requestId = 42, probe.ref)
+      val response = probe.receiveMessage()
+      response.requestId should ===(42)
+      response.value should ===(None)
+    }
+
+    "reply with latest temperature reading" in {
+      val recordProbe = createTestProbe[TemperatureRecorded]()
+      val readProbe = createTestProbe[RespondTemperature]()
+      val actorUnderTest = spawn(Device("my-group", "my-device"))
+
+      actorUnderTest ! Device.RecordTemperature(requestId = 1, 24.0, recordProbe.ref)
+      recordProbe.expectMessage(Device.TemperatureRecorded(requestId = 1))
+
+      actorUnderTest ! Device.ReadTemperature(requestId = 2, readProbe.ref)
+      val response1 = readProbe.receiveMessage()
+      response1.requestId should ===(2)
+      response1.value should ===(Some(24.0))
+
+      actorUnderTest ! Device.RecordTemperature(requestId = 3, 55.0, recordProbe.ref)
+      recordProbe.expectMessage(Device.TemperatureRecorded(requestId = 3))
+
+      actorUnderTest ! Device.ReadTemperature(requestId = 4, readProbe.ref)
+      val response2 = readProbe.receiveMessage()
+      response2.requestId should ===(4)
+      response2.value should ===(Some(55.0))
+    }
+  }
+}
