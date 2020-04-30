@@ -55,8 +55,15 @@ class DeviceManager(context: ActorContext[DeviceManager.DeviceManagerMessage])
 }
 
 object DeviceManager {
-  def apply(): Behavior[DeviceManagerMessage] =
-    Behaviors.setup(context => new DeviceManager(context))
+
+  def apply(): Behavior[DeviceManagerMessage] = starting()
+
+  private def starting(): Behavior[DeviceManagerMessage] = {
+    Behaviors.setup { context =>
+      context.log.info("creation of the behavior instance DeviceManager")
+      new DeviceManager(context)
+    }
+  }
 
   import DeviceGroup.DeviceGroupMessage
 
