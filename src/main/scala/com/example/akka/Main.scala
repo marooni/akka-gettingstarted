@@ -4,6 +4,7 @@ import akka.actor.typed.ActorSystem
 import com.example.akka.intro.iot.IotSupervisor
 import com.example.akka.quickstart.GreeterMain
 import com.example.akka.quickstart.GreeterMain.SayHello
+import com.example.implicits._
 
 object Main extends App {
 
@@ -29,6 +30,12 @@ object Main extends App {
 
   // IoT System
   //
-  val iotSystem = ActorSystem[Nothing](IotSupervisor(), "iot-system")
+  //val iotSystem = ActorSystem[Nothing](IotSupervisor(), "iot-system")
+
+  // implicit tests
+  //
+  val connector = DataConnector()
+  implicit val dataFetcher = DatabaseDataFetcher()
+  println(connector.getData())
 
 }
