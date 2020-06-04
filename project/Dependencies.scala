@@ -20,6 +20,11 @@ object Dependencies {
   /**
     * Reactive streams on top of Akka actors.
     */
+  val `akka-stream-typed`: ModuleID = "com.typesafe.akka" %% "akka-stream-typed" % Versions.akka
+
+  /**
+    * Reactive streams on top of Akka actors.
+    */
   val `akka-stream`: ModuleID = "com.typesafe.akka" %% "akka-stream" % Versions.akka
 
   /**
@@ -31,6 +36,18 @@ object Dependencies {
     * Alpakka
     */    
   val `alpakka`: ModuleID = "com.lightbend.akka" %% "akka-stream-alpakka-file" % Versions.alpakka
+
+  /**
+    * Framework for json deserialization/serialization
+    */
+  val `spray-json`: ModuleID = "io.spray" %% "spray-json" % "1.3.4"
+
+  /**
+    * For streaming to/for postgres.
+    */
+  val slick = "com.lightbend.akka" %% "akka-stream-alpakka-slick" % Versions.alpakka
+
+  val `postgresqlDriver`: ModuleID = "org.postgresql" % "postgresql" % "42.2.8"
 
   /**
     * Testing framework

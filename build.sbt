@@ -15,6 +15,11 @@ lazy val akkagettingstarted = project
     name := "akka-gettingstarted",
     description := "akka-gettingstarted",
     libraryDependencies ++= List(
+      Dependencies.`akka-stream-typed`,
+      Dependencies.`akka-stream`,
+      Dependencies.`spray-json`,
+      Dependencies.`slick`,
+      Dependencies.`postgresqlDriver`,
       Dependencies.scalatest % Test,
       Dependencies.logging,
       Dependencies.logback,
